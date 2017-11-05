@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.poc.services.Z0000</groupId>
+  <artifactId>Z0000_HelloGitHub</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Hello GitHub</name>
+  <description></description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <ejb.version>3.2</ejb.version>
+    
+    <version.maven.compiler.plugin>3.7.0</version.maven.compiler.plugin>
+    <version.maven.jar.plugin>3.0.2</version.maven.jar.plugin>
+    <version.maven.ejb.plugin>3.0.0</version.maven.ejb.plugin>
+    <version.maven.javadoc.plugin>2.10.4</version.maven.javadoc.plugin>
+    <version.maven.war.plugin>3.2.0</version.maven.war.plugin>
+    <version.maven.ear.plugin>2.10</version.maven.ear.plugin>
+
+    <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
+
+    <version.camel>2.19.0</version.camel>  <!-- 2.17.0.redhat-630187 -->
+
+    <version.spring>5.0.0.RELEASE</version.spring>
+    <version.spring.boot>1.5.8.RELEASE</version.spring.boot>
+
+    <version.forces.api>39.0.0</version.forces.api>
+
+    <build.time>${maven.build.timestamp}</build.time>
+
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>6.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- apache commons: lang, io, beanutils -->
+<!--
+	<dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.2</version>
+      <scope>provided</scope>
+    </dependency>
+-->
+    <!-- log4j and JUnit -->
+<!--
+	<dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+-->
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+ 
+    <plugins>
+      <plugin>    
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.maven.compiler.plugin}</version>
+        <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>      
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${version.maven.war.plugin}</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+          <archive>
+            <manifestEntries>
+              <Dependencies>org.apache.commons.lang</Dependencies>
+            </manifestEntries>
+          </archive>          
+        </configuration>
+      </plugin>
+
+      <!-- WildFly plug-in to deploy the WAR -->
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>${version.wildfly.maven.plugin}</version>
+     </plugin>
+
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
+      <!-- Use this profile for any OpenShift specific customization your app will need. -->
+      <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+      <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+      <id>openshift</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${version.maven.war.plugin}</version>
+            <configuration>
+              <outputDirectory>deployments</outputDirectory>
+              <warName>ROOT</warName>
+              <!-- Java EE doesn't require web.xml, Maven needs to catch up! -->
+              <failOnMissingWebXml>false</failOnMissingWebXml>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
